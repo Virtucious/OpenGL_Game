@@ -2,9 +2,14 @@
 #include "resource_manager.h"
 #include "sprite_renderer.h"
 #include "game_object.h"
+#include "ball_object.h"
+
+const glm::vec2 INITIAL_BALL_VELOCITY(100.0f, -350.0f);
+const float BALL_RADIUS = 12.5f;
 
 SpriteRenderer* Renderer;
 GameObject* Player;
+BallObject* Ball;
 
 Game::Game(unsigned int width, unsigned int height)
 	: State(GAME_ACTIVE), Keys(), Width(width), Height(height)
@@ -22,6 +27,7 @@ void Game::Init()
 {
 	//Load shaders
 	ResourceManager::LoadShader("sprite.vert", "sprite.frag", nullptr, "sprite");
+	
 	//configure shaders
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width),
 		static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
@@ -36,7 +42,7 @@ void Game::Init()
 	ResourceManager::LoadTexture("resources/block.png", false, "block");
 	ResourceManager::LoadTexture("resources/block_solid.png", false, "block_solid");
 	ResourceManager::LoadTexture("resources/paddle.png", true, "paddle");
-	
+	ResourceManager::LoadTexture("resources/awesomeface.png", true , "face");
 	//load levels
 	GameLevel one; one.Load("one.lvl", this->Width, this->Height/2);
 	GameLevel two; two.Load("two.lvl", this->Width, this->Height/2);
@@ -51,11 +57,13 @@ void Game::Init()
 	//configure game objects 
 	glm::vec2 playerPos = glm::vec2(this->Width / 2 - PLAYER_SIZE.x / 2.0f, this->Height - PLAYER_SIZE.y);
 	Player = new GameObject(playerPos, PLAYER_SIZE, ResourceManager::GetTexture("paddle"));
+	glm::vec2 ballPos = playerPos + glm::vec2(PLAYER_SIZE.x / 2.0f - BALL_RADIUS, -BALL_RADIUS * 2.0f);
+	Ball = new BallObject(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager::GetTexture("face"));
 }
 
 void Game::Update(float dt)
 {
-
+	Ball->Move(dt, this->Width);
 }
 
 void Game::ProcessInput(float dt)
@@ -67,20 +75,38 @@ void Game::ProcessInput(float dt)
 		if (this->Keys[GLFW_KEY_A])
 		{
 			if (Player->Position.x >= 0.0f)
+			{
 				Player->Position.x -= velocity;
+				if (Ball->Struck)
+					Ball->Position.x -= velocity;
+			}
 		}
 		if (this->Keys[GLFW_KEY_D])
 		{
 			if (Player->Position.x <= this->Width - Player->Size.x)
+			{
 				Player->Position.x += velocity;
+				if (Ball->Struck)
+					Ball->Position.x += velocity;
+			}
 		}
+		if (this->Keys[GLFW_KEY_SPACE])
+			Ball->Struck = false;
 	}
 }
 
 void Game::Render()
 {
-	//draw level
-	this->Levels[this->Level].Draw(*Renderer);
-	//draw player
-	Player->Draw(*Renderer);
+	if (this->State == GAME_ACTIVE)
+	{
+		// draw background
+		Texture2D backgroundTexture;
+		backgroundTexture = ResourceManager::GetTexture("background");
+		Renderer->DrawSprite(backgroundTexture, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
+		// draw level
+		this->Levels[this->Level].Draw(*Renderer);
+		// draw player
+		Player->Draw(*Renderer);
+		Ball->Draw(*Renderer);
+	}
 }
