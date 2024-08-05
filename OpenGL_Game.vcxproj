@@ -137,6 +137,7 @@
     <ClCompile Include="game_object.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="particle_generator.cpp" />
     <ClCompile Include="sprite_renderer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="resource_manager.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="game_level.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="libraries\include\stb_image.h" />
+    <ClInclude Include="particle_generator.h" />
     <ClInclude Include="resource_manager.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="sprite_renderer.h" />
@@ -157,6 +159,8 @@
   <ItemGroup>
     <None Include="four.lvl" />
     <None Include="one.lvl" />
+    <None Include="particle.frag" />
+    <None Include="particle.vert" />
     <None Include="sprite.frag" />
     <None Include="sprite.vert" />
     <None Include="three.lvl" />

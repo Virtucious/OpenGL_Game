@@ -38,6 +38,9 @@ public:
 	void ProcessInput(float dt);
 	void Update(float dt);
 	void Render();
+	void DoCollisions();
+	void ResetLevel();
+	void ResetPlayer();
 };
 
 #endif

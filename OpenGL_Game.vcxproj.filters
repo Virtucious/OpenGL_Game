@@ -45,6 +45,9 @@
     <ClCompile Include="ball_object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="particle_generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -74,6 +77,9 @@
     <ClInclude Include="ball_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="particle_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="sprite.vert" />
@@ -82,5 +88,7 @@
     <None Include="two.lvl" />
     <None Include="three.lvl" />
     <None Include="four.lvl" />
+    <None Include="particle.vert" />
+    <None Include="particle.frag" />
   </ItemGroup>
 </Project>
